@@ -8,10 +8,12 @@ server_scripts {
   '@async/async.lua',
   '@mysql-async/lib/MySQL.lua',
   'config/config.lua',
+  'common.lua',
   'server/main.lua'
 }
 
 client_scripts {
   'config/config.lua',
+  'common.lua',
   'client/main.lua'
 }
