@@ -170,6 +170,7 @@ AddEventHandler('esx_truck_inventory:removeInventoryItem', function(plate, item,
 	end
 end)
 
+
 RegisterServerEvent('esx_truck_inventory:addInventoryItem')
 AddEventHandler('esx_truck_inventory:addInventoryItem', function(type, model, plate, item, qtty, name, itemType, key)
   	local _source = source
@@ -337,6 +338,7 @@ ESX.RegisterServerCallback('esx_truck:checkvehicle',function(source, cb, plate)
 	cb(isFound)
 end)
 
+
 RegisterServerEvent('esx_truck_inventory:AddVehicleList')
 AddEventHandler('esx_truck_inventory:AddVehicleList', function(plate)
 	local _source = source
@@ -364,24 +366,6 @@ end)
 AddEventHandler('onMySQLReady', function()
     MySQL.Async.execute('DELETE FROM `truck_inventory` WHERE `count` = 0', {})
 end)
-
-function getInventoryWeight(inventory)
-    local weight = 0
-    local itemWeight = 0
-    
-    if inventory ~= nil then
-        for i = 1, #inventory, 1 do
-            if inventory[i] ~= nil then
-                itemWeight = Config.DefaultWeight
-                if arrayWeight[inventory[i].name] ~= nil then
-                    itemWeight = arrayWeight[inventory[i].name]
-                end
-                weight = weight + (itemWeight * inventory[i].count)
-            end
-        end
-    end
-    return weight
-end
 
 function dump(o)
     if type(o) == 'table' then
