@@ -2,7 +2,7 @@ ESX = nil
 local VehicleList = { }
 
 TriggerEvent('esx:getSharedObject', function(obj)
-  ESX = obj
+    ESX = obj
 end)
 
 AddEventHandler('onMySQLReady', function ()
@@ -169,7 +169,6 @@ AddEventHandler('esx_truck_inventory:removeInventoryItem', function(plate, item,
         end)
 	end
 end)
-
 
 RegisterServerEvent('esx_truck_inventory:addInventoryItem')
 AddEventHandler('esx_truck_inventory:addInventoryItem', function(type, model, plate, item, qtty, name, itemType, key)
@@ -338,7 +337,6 @@ ESX.RegisterServerCallback('esx_truck:checkvehicle',function(source, cb, plate)
 	cb(isFound)
 end)
 
-
 RegisterServerEvent('esx_truck_inventory:AddVehicleList')
 AddEventHandler('esx_truck_inventory:AddVehicleList', function(plate)
 	local _source = source
@@ -363,16 +361,37 @@ AddEventHandler('esx_truck_inventory:RemoveVehicleList', function(plate, reason)
 	end
 end)
 
+AddEventHandler('onMySQLReady', function()
+    MySQL.Async.execute('DELETE FROM `truck_inventory` WHERE `count` = 0', {})
+end)
+
+function getInventoryWeight(inventory)
+    local weight = 0
+    local itemWeight = 0
+    
+    if inventory ~= nil then
+        for i = 1, #inventory, 1 do
+            if inventory[i] ~= nil then
+                itemWeight = Config.DefaultWeight
+                if arrayWeight[inventory[i].name] ~= nil then
+                    itemWeight = arrayWeight[inventory[i].name]
+                end
+                weight = weight + (itemWeight * inventory[i].count)
+            end
+        end
+    end
+    return weight
+end
 
 function dump(o)
-   if type(o) == 'table' then
-      local s = '{ '
-      for k,v in pairs(o) do
-         if type(k) ~= 'number' then k = '"'..k..'"' end
-         s = s .. '['..k..'] = ' .. dump(v) .. ','
-      end
-      return s .. '} '
-   else
-      return tostring(o)
-   end
+    if type(o) == 'table' then
+        local s = '{ '
+        for k, v in pairs(o) do
+            if type(k) ~= 'number' then k = '"' .. k .. '"' end
+            s = s .. '[' .. k .. '] = ' .. dump(v) .. ','
+        end
+        return s .. '} '
+    else
+        return tostring(o)
+    end
 end
